@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaultScan — Advanced JWT Security Analysis & Learning Platform</title>
+  <meta name="description" content="Offline JWT Security Analyzer, Vulnerability Inspector, Misconfiguration Auditing, Tampering Lab & Defense Suite">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header Area -->
+    <header class="header">
+      <div class="header-top-row">
+        <div class="status-badge">
+          <span class="status-dot"></span>
+          <span>LOCAL ANALYSIS MODE</span>
+        </div>
+        <button id="btnClearAllData" class="btn-danger-ghost" title="Clear all local state, history, and metrics">
+          🗑️ Clear All Data
+        </button>
+      </div>
+
+      <div class="logo-wrapper">
+        <h1 class="logo-text">VAULTSCAN</h1>
+        <span class="version-tag">ADVANCED v2.0</span>
+      </div>
+      <p class="tagline">Enterprise-Grade JWT Security Analysis & Vulnerability Learning Platform</p>
+      <p class="subtext">All parsing and security analysis execute 100% locally. Zero telemetry, zero external API transmission.</p>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs" id="mainNavTabs">
+      <button class="nav-tab active" data-tab="tab-dashboard">
+        📊 Dashboard
+      </button>
+      <button class="nav-tab" data-tab="tab-analyze">
+        🛡️ Analyze JWT
+      </button>
+      <button class="nav-tab" data-tab="tab-compare">
+        ⚖️ Compare JWTs
+      </button>
+      <button class="nav-tab" data-tab="tab-tamper">
+        🧪 Tampering Lab
+      </button>
+      <button class="nav-tab" data-tab="tab-securitylab">
+        ⚡ Security Lab
+      </button>
+      <button class="nav-tab" data-tab="tab-history">
+        📜 History & Trends
+      </button>
+      <button class="nav-tab" data-tab="tab-learning">
+        📚 Learning Mode
+      </button>
+      <button class="nav-tab" data-tab="tab-reports">
+        📄 Audit Reports
+      </button>
+    </nav>
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content-section">
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Analyzed</div>
+          <div class="stat-value" id="dashTotalAnalyzed">0</div>
+          <div class="stat-subtext">Tokens audited in session</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Average Score</div>
+          <div class="stat-value" id="dashAvgScore">0 / 100</div>
+          <div class="stat-subtext">Mean security posture</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Critical Findings</div>
+          <div class="stat-value text-danger" id="dashCriticalIssues">0</div>
+          <div class="stat-subtext">Immediate forgery risks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Hardened Tokens</div>
+          <div class="stat-value text-success" id="dashGradeACount">0 tokens</div>
+          <div class="stat-subtext">Grade A compliance</div>
+        </div>
+      </div>
+
+      <div class="dash-sections-row">
+        <!-- Score Trend -->
+        <div class="card">
+          <div class="card-header-flex">
+            <h3 class="card-title">📈 Security Score Trajectory</h3>
+            <span class="trend-badge trend-stable" id="dashTrendDirection">Stable</span>
+          </div>
+          <div id="trendGraphContainer">
+            <div class="empty-hint">Analyze tokens to build historical security trajectory.</div>
+          </div>
+        </div>
+
+        <!-- Vulnerability & Grade Breakdown -->
+        <div class="card">
+          <h3 class="card-title">🎯 Threat & Grade Distribution</h3>
+          <div class="severity-stat-bar">
+            <div class="sev-pill pill-crit">Critical: <strong id="sevCountCrit">0</strong></div>
+            <div class="sev-pill pill-high">High: <strong id="sevCountHigh">0</strong></div>
+            <div class="sev-pill pill-med">Medium: <strong id="sevCountMed">0</strong></div>
+            <div class="sev-pill pill-low">Low: <strong id="sevCountLow">0</strong></div>
+          </div>
+          <div class="grade-distribution-row" style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-around;">
+            <div class="grade-col"><span class="badge-grade grade-a">A</span> <strong id="gradeCountA">0</strong></div>
+            <div class="grade-col"><span class="badge-grade grade-b">B</span> <strong id="gradeCountB">0</strong></div>
+            <div class="grade-col"><span class="badge-grade grade-c">C</span> <strong id="gradeCountC">0</strong></div>
+            <div class="grade-col"><span class="badge-grade grade-d">D</span> <strong id="gradeCountD">0</strong></div>
+            <div class="grade-col"><span class="badge-grade grade-f">F</span> <strong id="gradeCountF">0</strong></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Shortcuts -->
+      <div class="card">
+        <h3 class="card-title">🚀 Fast Launch Workflows</h3>
+        <div class="quick-actions-grid">
+          <a class="action-shortcut-card" data-goto-tab="tab-analyze">
+            <h4>🛡️ Analyze JWT</h4>
+            <p>Run all 12 RFC 7519 & MITRE compliance checks</p>
+          </a>
+          <a class="action-shortcut-card" data-goto-tab="tab-compare">
+            <h4>⚖️ Compare Tokens</h4>
+            <p>Diff identity, role escalations, and expiry</p>
+          </a>
+          <a class="action-shortcut-card" data-goto-tab="tab-tamper">
+            <h4>🧪 Tampering Lab</h4>
+            <p>Simulate payload changes and verify signature failure</p>
+          </a>
+          <a class="action-shortcut-card" data-goto-tab="tab-securitylab">
+            <h4>⚡ Security Lab</h4>
+            <p>8 preconfigured attack scenarios & key entropy tester</p>
+          </a>
+          <a class="action-shortcut-card" data-goto-tab="tab-reports">
+            <h4>📄 Generate Report</h4>
+            <p>Export formal compliance audit report as PDF</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: ANALYZE JWT (Core Preserved Flow) -->
+    <section id="tab-analyze" class="tab-content-section hidden">
+      <!-- Input Panel -->
+      <section class="card input-panel">
+        <div class="panel-header">
+          <label for="jwtInput" class="input-label">Target JSON Web Token (JWT)</label>
+          <span class="char-counter" id="charCounter">0 characters</span>
+        </div>
+        <textarea
+          id="jwtInput"
+          class="jwt-textarea"
+          placeholder="Paste your JWT here (e.g. eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIn0...)"
+          spellcheck="false"
+        ></textarea>
+        <div class="button-bar">
+          <button id="btnAnalyze" class="btn btn-primary">
+            <span class="btn-icon">⚡</span> Analyze Token
+          </button>
+          <div class="sample-btn-group">
+            <button id="btnLoadTest" class="btn btn-secondary">
+              <span class="btn-icon">📂</span> Load Test Tokens ▾
+            </button>
+            <div id="sampleDropdown" class="sample-dropdown hidden"></div>
+          </div>
+          <button id="btnClear" class="btn btn-ghost">
+            <span class="btn-icon">✖</span> Clear
+          </button>
+        </div>
+      </section>
+
+      <!-- Risk Score Panel -->
+      <section id="riskPanel" class="card risk-panel hidden">
+        <div class="gauge-container">
+          <div class="score-gauge" id="scoreGauge">
+            <div class="gauge-inner">
+              <span class="score-value" id="scoreValue">0</span>
+              <span class="score-subtext">SCORE / 100</span>
+            </div>
+          </div>
+        </div>
+        <div class="grade-container">
+          <div class="grade-label">SECURITY GRADE</div>
+          <div class="letter-grade" id="letterGrade">F</div>
+        </div>
+        <div class="summary-container">
+          <h2 class="risk-headline" id="riskHeadline">Security Assessment</h2>
+          <p class="summary-line" id="summaryLine">Scanning token against 12 security vectors...</p>
+        </div>
+      </section>
+
+      <!-- Token Security Profile 4 Pillars -->
+      <section id="profilePanel" class="card profile-panel hidden">
+        <h3 class="card-title">🏛️ 4-Pillar Token Security Profile</h3>
+        <div class="pillars-grid">
+          <div class="pillar-box" id="pillarAuth">
+            <div class="pillar-top">
+              <span class="pillar-title">Authentication</span>
+              <span class="pillar-status-tag tag-secure">SECURE</span>
+            </div>
+            <div class="pillar-score-val">100</div>
+            <div class="pillar-progress-bar"><div class="pillar-progress-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="pillar-box" id="pillarClaims">
+            <div class="pillar-top">
+              <span class="pillar-title">Claims & Data</span>
+              <span class="pillar-status-tag tag-secure">SECURE</span>
+            </div>
+            <div class="pillar-score-val">100</div>
+            <div class="pillar-progress-bar"><div class="pillar-progress-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="pillar-box" id="pillarCrypto">
+            <div class="pillar-top">
+              <span class="pillar-title">Cryptography</span>
+              <span class="pillar-status-tag tag-secure">SECURE</span>
+            </div>
+            <div class="pillar-score-val">100</div>
+            <div class="pillar-progress-bar"><div class="pillar-progress-fill" style="width: 100%;"></div></div>
+          </div>
+          <div class="pillar-box" id="pillarLifetime">
+            <div class="pillar-top">
+              <span class="pillar-title">Lifetime & Expiry</span>
+              <span class="pillar-status-tag tag-secure">SECURE</span>
+            </div>
+            <div class="pillar-score-val">100</div>
+            <div class="pillar-progress-bar"><div class="pillar-progress-fill" style="width: 100%;"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Security Improvement Checklist (Improve My Score) -->
+      <section id="improvementPanel" class="improvement-panel hidden">
+        <div class="improvement-header">
+          <div>
+            <h3 style="margin: 0; color: #fff;">🛠️ Improve My Score Simulator</h3>
+            <span style="font-size: 12px; color: var(--text-muted);">Check items below to calculate potential score recovery</span>
+          </div>
+          <div class="potential-badge" id="potentialScoreBadge">Potential: 100 / 100</div>
+        </div>
+        <ul class="checklist-list" id="improvementChecklist"></ul>
+        <div style="margin-top: 14px; text-align: right;">
+          <button id="btnShowSecureEx" class="btn btn-sm btn-secondary">🌟 Show Hardened Example Token</button>
+        </div>
+      </section>
+
+      <!-- Security Findings -->
+      <section id="findingsPanel" class="card findings-panel hidden">
+        <div class="panel-header">
+          <h3 class="panel-title">Audit Findings & Remediation</h3>
+          <span class="findings-badge-counter" id="findingsCountBadge">0 Issues Found</span>
+        </div>
+        <div class="findings-list" id="findingsList"></div>
+      </section>
+
+      <!-- Decoded Token Inspection -->
+      <section id="decodedPanel" class="card decoded-panel hidden">
+        <div class="panel-header">
+          <h3 class="panel-title">Decoded Structure Inspection</h3>
+          <span class="badge-info">RFC 7519 Payload</span>
+        </div>
+        <div class="decoded-grid">
+          <div class="decoded-col">
+            <div class="decoded-col-header">
+              <span class="col-title">HEADER</span>
+              <span class="col-sub">Algorithm & Token Type</span>
+            </div>
+            <pre class="json-code" id="headerJson"><code>{}</code></pre>
+          </div>
+          <div class="decoded-col">
+            <div class="decoded-col-header">
+              <span class="col-title">PAYLOAD</span>
+              <span class="col-sub">Claims & Attributes</span>
+            </div>
+            <pre class="json-code" id="payloadJson"><code>{}</code></pre>
+          </div>
+        </div>
+        <div class="signature-status-bar" id="sigStatusBar">
+          <span class="sig-warning">⚠️ Signature: NOT VERIFIED (no secret provided)</span>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB 3: COMPARE JWTS -->
+    <section id="tab-compare" class="tab-content-section hidden">
+      <div class="card">
+        <h3 class="card-title">⚖️ Differential JWT Inspection Engine</h3>
+        <p class="subtext">Compare two tokens to detect identity changes, privilege escalations, algorithm shifts, and claim variations.</p>
+        
+        <div class="compare-grid">
+          <div>
+            <label class="input-label">TOKEN A (Base Token)</label>
+            <textarea id="compareTokenA" class="jwt-textarea" style="height: 120px;" placeholder="Paste base token A..."></textarea>
+          </div>
+          <div>
+            <label class="input-label">TOKEN B (Comparison Token)</label>
+            <textarea id="compareTokenB" class="jwt-textarea" style="height: 120px;" placeholder="Paste comparative token B..."></textarea>
+          </div>
+        </div>
+
+        <div class="button-bar">
+          <button id="btnRunCompare" class="btn btn-primary">Compare Tokens</button>
+          <button id="btnLoadCompareSample" class="btn btn-secondary">Load Escalation Demo</button>
+          <button id="btnClearCompare" class="btn btn-ghost">Clear</button>
+        </div>
+
+        <div id="compareResults" class="hidden" style="margin-top: 24px;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: TAMPERING LAB -->
+    <section id="tab-tamper" class="tab-content-section hidden">
+      <div class="card">
+        <h3 class="card-title">🧪 Educational JWT Tampering Lab</h3>
+        <p class="subtext">Explore why modifying claims in transit breaks cryptographic verification and forces secure backends to reject untrusted tokens.</p>
+
+        <div style="margin-bottom: 16px;">
+          <label class="input-label">Original Valid Token</label>
+          <textarea id="tamperTokenInput" class="jwt-textarea" style="height: 100px;" placeholder="Paste a valid JWT or click 'Load Demo Token'..."></textarea>
+          <button id="btnLoadTamperSample" class="btn btn-sm btn-secondary" style="margin-top: 8px;">Load Demo Student Token</button>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <label class="input-label">Claims Editor (Modify values such as role: "admin")</label>
+          <textarea id="tamperPayloadEditor" class="claims-editor-textarea">{
+  "user": "student",
+  "role": "admin"
+}</textarea>
+        </div>
+
+        <div class="button-bar">
+          <button id="btnRunTamper" class="btn btn-primary">Simulate Tampering</button>
+        </div>
+
+        <div id="tamperResults" class="hidden" style="margin-top: 24px;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: SECURITY LAB -->
+    <section id="tab-securitylab" class="tab-content-section hidden">
+      <!-- Section A: 8 Predefined Attack Scenarios -->
+      <div class="card" style="margin-bottom: 24px;">
+        <h3 class="card-title">⚡ Attack Scenario Simulation Suite</h3>
+        <p class="subtext">Preconfigured educational exploit scenarios demonstrating common JWT implementation pitfalls and real-world vulnerabilities.</p>
+        <div id="scenariosList"></div>
+      </div>
+
+      <!-- Section B: Secret Strength Analyzer -->
+      <div class="card">
+        <h3 class="card-title">🔑 Secret Strength & Entropy Analyzer</h3>
+        <p class="subtext">Evaluate your HMAC passphrase against dictionary databases, character diversity, and Shannon entropy metrics.</p>
+        <div style="display: flex; gap: 10px; margin-top: 14px;">
+          <input type="text" id="testSecretInput" class="jwt-textarea" style="height: 44px; padding: 10px 14px;" placeholder="Test a secret (e.g. secret123, hunter2, my-random-key)...">
+          <button id="btnTestSecret" class="btn btn-primary" style="white-space: nowrap;">Test Strength</button>
+        </div>
+        <div id="secretStrengthResult" class="hidden"></div>
+      </div>
+    </section>
+
+    <!-- TAB 6: HISTORY & TRENDS -->
+    <section id="tab-history" class="tab-content-section hidden">
+      <section class="card history-panel">
+        <div class="panel-header">
+          <div>
+            <h3 class="panel-title">Session Audit History</h3>
+            <span class="subtext" style="display: block; margin: 0;">Preserves last 20 analysed tokens in temporary memory</span>
+          </div>
+          <button id="btnClearHistory" class="btn btn-sm btn-ghost">Clear History</button>
+        </div>
+        <div class="table-responsive">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Token (Truncated)</th>
+                <th>Grade</th>
+                <th>Score</th>
+                <th>Risk Level</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+              <tr>
+                <td colspan="5" class="text-center text-muted">No analysis records in current session.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </section>
+
+    <!-- TAB 7: LEARNING MODE -->
+    <section id="tab-learning" class="tab-content-section hidden">
+      <div class="card">
+        <h3 class="card-title">📚 Security Learning Hub</h3>
+        <p class="subtext">Comprehensive educational guides, detection mechanics, and code remediations for all 12 security vectors.</p>
+        <div class="learning-search-box">
+          <input type="text" id="learningSearchInput" class="jwt-textarea" style="height: 42px; padding: 10px 14px;" placeholder="Search vulnerabilities, MITRE codes, or fixes...">
+        </div>
+        <div class="learning-cards-grid" id="learningCardsGrid"></div>
+      </div>
+    </section>
+
+    <!-- TAB 8: AUDIT REPORTS -->
+    <section id="tab-reports" class="tab-content-section hidden">
+      <div class="card">
+        <h3 class="card-title">📄 Security Audit Report Generator</h3>
+        <p class="subtext">Generate an executive-level, print-ready compliance audit report suitable for lab submissions and project portfolios.</p>
+        
+        <div style="margin-bottom: 14px;">
+          <label class="input-label">Audit Target Token</label>
+          <textarea id="reportTokenInput" class="jwt-textarea" style="height: 90px;" placeholder="Paste token to audit or click 'Use Active Token'..."></textarea>
+        </div>
+
+        <div class="button-bar">
+          <button id="btnGenerateReport" class="btn btn-primary">Generate Security Report</button>
+          <button id="btnUseCurrentToken" class="btn btn-secondary">Use Active Token</button>
+        </div>
+
+        <div id="reportActionsBar" class="hidden" style="margin-top: 16px; display: flex; gap: 10px;">
+          <button id="btnPrintReport" class="btn btn-sm btn-primary">🖨️ Print / Save as PDF</button>
+          <button id="btnDownloadHtml" class="btn btn-sm btn-secondary">💾 Download HTML Report</button>
+        </div>
+
+        <div id="reportPreviewContainer" style="margin-top: 20px;"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p class="footer-text">Built for security education and academic demonstration. Never paste confidential production credentials.</p>
+      <p class="footer-links">
+        <a href="#readme" id="btnShowDocModal">Documentation & 12 Checks Reference</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden">Copied to clipboard!</div>
+
+  <!-- Documentation Modal -->
+  <div id="docModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">VaultScan — 12 Security Vectors Reference</h3>
+        <button id="btnCloseModal" class="btn-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>VaultScan inspects tokens against standard RFC 7519 requirements and MITRE ATT&CK techniques:</p>
+        <ol class="check-list-doc">
+          <li><strong>alg: none</strong> (CRITICAL, MITRE T1550.001) — Token unsigned; permits arbitrary claim forgery.</li>
+          <li><strong>Weak HS256 secret</strong> (CRITICAL, MITRE T1110.002) — Passphrase crackable via offline dictionary search.</li>
+          <li><strong>Algorithm confusion</strong> (HIGH, MITRE T1550.001) — Asymmetric verification confounded with symmetric HMAC.</li>
+          <li><strong>Missing exp claim</strong> (HIGH) — Token never expires; permanent replay vulnerability.</li>
+          <li><strong>Expired token</strong> (MEDIUM) — Session elapsed; verifier must reject expired state.</li>
+          <li><strong>Excessive expiry</strong> (MEDIUM) — Token lifetime exceeds 24 hours without rotation.</li>
+          <li><strong>Sensitive payload data</strong> (HIGH, MITRE T1552.001) — Plaintext credentials or PII readable in Base64URL.</li>
+          <li><strong>Missing iss claim</strong> (LOW) — Issuer authority unspecified.</li>
+          <li><strong>Missing aud claim</strong> (LOW) — Audience target service unspecified.</li>
+          <li><strong>kid path traversal</strong> (HIGH, MITRE T1083) — Directory traversal sequences in key ID.</li>
+          <li><strong>Large token size</strong> (LOW) — Token length exceeds 4,096 bytes; HTTP 431 risk.</li>
+          <li><strong>External jku/x5u URL</strong> (HIGH, MITRE T1195) — Remote JWKS endpoint pointing to untrusted hosts.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/dashboard.js"></script>
+  <script src="/static/comparison.js"></script>
+  <script src="/static/tampering.js"></script>
+  <script src="/static/learning.js"></script>
+  <script src="/static/reports.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>
